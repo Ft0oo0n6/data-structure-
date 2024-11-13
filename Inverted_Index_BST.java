@@ -1,14 +1,3 @@
-/*
-Inverted Index with BSTs: Enhance the implementation of Inverted Index by using BSTs 
-instead of Lists 
-Create the BST Inverted Index which will enhance the search for items whether in 
-terms or documents IDs. . 
- */
-
-/**
- *
- * @author Manal Alhihi
- */
 
 public class Inverted_Index_BST {
             BST < String , Term> invertedindexBST; 
