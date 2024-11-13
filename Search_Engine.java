@@ -2,10 +2,7 @@
 import java.io.File;
 import java.util.Scanner;
 
-/**
- *
- * @author Majdi
- */
+
 public class Search_Engine {
     int tokens = 0;
     int vocabulary = 0;//vocab
