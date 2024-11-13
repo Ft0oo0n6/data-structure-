@@ -1,15 +1,7 @@
 
 import java.util.function.Function;
 
-/*
-Inverted Index with AVLs: Enhance the implementation of Inverted Index by using BSTs 
-instead of Lists. 
- */
 
-/**
- *
- * @author Manal Alhihi
- */
 public class Inverted_Index_AVLRanked {
             class frequency
             {
