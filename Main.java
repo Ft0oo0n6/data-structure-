@@ -1,10 +1,5 @@
 import java.util.Scanner;
 
-
-/**
- *
- * @author Manal Alhihi
- */
 public class Main {
        
      public static Scanner input = new Scanner (System.in);
