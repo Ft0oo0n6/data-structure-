@@ -25,7 +25,7 @@ public class Search_Engine {
       invertedindexAVLranked = new Inverted_Index_AVLRanked();
       indexranked = new IndexRanked();
       invertedindexBSTranked = new Inverted_Index_BSTRanked();
-      invertedindexAVLranked = new Inverted_Index_AVLRanked();
+           invertedindexranked = new Inverted_IndexRanked(); 
    }
     
 
