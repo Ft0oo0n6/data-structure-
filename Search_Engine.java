@@ -1,5 +1,8 @@
+
+
 import java.io.File;
 import java.util.Scanner;
+
 
 public class Search_Engine {
    int tokens = 0;
@@ -25,7 +28,7 @@ public class Search_Engine {
       invertedindexAVLranked = new Inverted_Index_AVLRanked();
       indexranked = new IndexRanked();
       invertedindexBSTranked = new Inverted_Index_BSTRanked();
-           invertedindexranked = new Inverted_IndexRanked(); 
+      invertedindexranked = new Inverted_IndexRanked();
    }
     
 
@@ -50,6 +53,7 @@ public class Search_Engine {
             data = data.substring(0, data.length()-1);
             data = data.toLowerCase();
             data =  data.replaceAll("[\']", "");
+
             data = data.replaceAll("[^a-zA-Z0-9]", " ").trim() ;
          
             String [] words = data.split(" "); 
@@ -65,13 +69,14 @@ public class Search_Engine {
                {
                             
                   { 
+                  this.index.addToDocument(documentId, word);
                      this.DocumentIndex.adddocument(documentId, word);
                      this.DocumentIndexBST.adddocument(documentId, word);
                      this.DocumentIndexAVL.adddocument(documentId, word);
                   
-                     this.indexranked.addDocument (documentId, word);
-                     this.invertedindexranked.addNew(documentId, word);
-                     this.invertedindexBSTranked.addNew(documentId, word);
+                     this.indexranked.add_document (documentId, word);
+                     this.invertedindexranked.add_document(documentId, word);
+                     this.invertedindexBSTranked.add_document(documentId, word);
                      this.invertedindexAVLranked.adddocument(documentId, word);
                             /*
                                 this.index.addDocument(documentId, wd);
@@ -83,7 +88,7 @@ public class Search_Engine {
                }
             }
          
-                    //this.index.printDocment(docID);
+                    //this.index.displayDocument(documentId);
          }
                 //this.DocumentIndex.printDocment();
                 //this.invertedindexBST.printDocument();
@@ -91,10 +96,8 @@ public class Search_Engine {
                 //this.invertedindexAVLranked.printDocument();
                 
          vocab = DocumentIndexAVL.DocumentIndexAVL.size();
-      
          System.out.println("tokens " + tokens);
-         System.out.println("vocabs " + vocab);
-                
+         System.out.println("vocabs " + vocab);    
          scanner.close();
          scanner2.close();
       }
@@ -103,34 +106,27 @@ public class Search_Engine {
       }
    }
     
-   public boolean []  Retrieval(String string , int DatasetSType)
+   public boolean []  Retrieval(String string , int DatasetSType) // be sure
    {
       boolean [] documents = new boolean [50] ;
       for (int i = 0 ; i < documents.length ; i++)
          documents[i] = false;
    
-      switch (DatasetSType)
-      {
-         case 1 :
-            System.out.println(" Boolean_Retrieval using index list");
-            documents = this.index.AND_OR_Function(string);
-            break;
-         case 2:
-            System.out.println(" Boolean_Retrieval using inverted index list");
-            documents = this.DocumentIndex.AND_OR_Function(string);
-            break;
-         case 3:
-            System.out.println(" Boolean_Retrieval using BST");
-            documents = this.DocumentIndexBST.AND_OR_Function(string);
-            break;
-         case 4:
-            System.out.println(" Boolean_Retrieval using AVL");
-            documents = this.DocumentIndexAVL.AND_OR_Function(string);
-            break;
-         default :
-            System.out.println("Bad data structure");
-                
-      }
+     if (DatasetSType == 1) {
+    System.out.println("Boolean_Retrieval using index list");
+    documents = this.index.AND_OR_Function(string);
+} else if (DatasetSType == 2) {
+    System.out.println("Boolean_Retrieval using inverted index list");
+    documents = this.DocumentIndex.AND_OR_Function(string);
+} else if (DatasetSType == 3) {
+    System.out.println("Boolean_Retrieval using BST");
+    documents = this.DocumentIndexBST.AND_OR_Function(string);
+} else if (DatasetSType == 4) {
+    System.out.println("Boolean_Retrieval using AVL");
+    documents = this.DocumentIndexAVL.AND_OR_Function(string);
+} else {
+    System.out.println("Bad data structure");
+}
       return documents;
    }
         
@@ -138,48 +134,45 @@ public class Search_Engine {
    {
       this.invertedindexAVLranked.TreeFreq(string);
    }
-   public void Ranked_Index(String str)
+   public void IndexRanked(String str)
    {
       this.indexranked.TreeFreq(str);
    }
-   public void Ranked_RetrievalBST(String str)
+   public void RetrievalRankedBST(String str)
    {
       this.invertedindexBSTranked.TreeFreq(str);
    }
 
-   public void Ranked_RetrievalAVL(String str)
+   public void RetrievalRankedAVL(String str)//name changed
    {
       this.invertedindexAVLranked.TreeFreq(str);
    }
-   public boolean []  Term_Retrieval(String str , int DSType)
+   public boolean []  RetrievalTerm(String str , int DSType)
     {
         boolean [] docs = new boolean [50] ;
         for ( int i = 0 ; i < docs.length ; i++)
             docs[i] = false;
 
-        switch (DSType)
-        {
-            case 1 :
-                docs = index.retrieveDocuments(str);
-                break;
-            case 2 :
-               if (DocumentIndex.found(str))
-                    docs = DocumentIndex.DocumentIndex.retrieve().getDocs();
-                break;
-             case 3:
-                if (DocumentIndexBST.found(str))
-                    docs = DocumentIndexBST.DocumentIndexBST.retrieve().getDocs();
-                break;
-            case 4:
-                if (DocumentIndexAVL.found(str))
-                    docs = DocumentIndexAVL.DocumentIndexAVL.retrieve().getDocs();
-                break;
-            default :
-                System.out.println("Bad data structure");
-        }
+       if (DSType == 1) {
+    docs = index.retrieveDocuments(str);
+} else if (DSType == 2) {
+    if (DocumentIndex.found(str)) {
+        docs = DocumentIndex.DocumentIndex.retrieve().getDocs();
+    }
+} else if (DSType == 3) {
+    if (DocumentIndexBST.found(str)) {
+        docs = DocumentIndexBST.DocumentindexBST.retrieve().getDocs();
+    }
+} else if (DSType == 4) {
+    if (DocumentIndexAVL.found(str)) {
+        docs = DocumentIndexAVL.DocumentIndexAVL.retrieve().getDocs();
+    }
+} else {
+    System.out.println("Bad data structure");
+}
         return docs;
     }
-  public void Indexed_Documents()
+  public void IndexedDocuments()
     {
         System.out.println("All Documents with the number of words in them ");
         for ( int i = 0 ; i < 50 ; i++ )
@@ -190,10 +183,10 @@ public class Search_Engine {
         
     }
     
-    public void Indexed_Tokens()
+    public void IndexedTokens()
     {
         System.out.println("All tokens with the documents appear in it ");
-        DocumentIndexBST.DocumentIndexBST.viewData();
+        DocumentIndexBST.DocumentindexBST.viewData();
         DocumentIndexAVL.DocumentIndexAVL.PrintData();
     }
   
