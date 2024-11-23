@@ -1,12 +1,155 @@
-
 import java.util.function.Function;
 
+public class Inverted_Index_BSTRanked {
+    class frequency {
+        int documentId = 0;
+        int fr = 0;
+    }
 
+    BST<Integer, BST<String, Rank>> BSTrank;
+    frequency[] freq = new frequency[50];
+
+    public Inverted_Index_BSTRanked() {
+        BSTrank = new BST<Integer, BST<String, Rank>>();
+    }
+
+    public boolean add_document(int documentId, String wd) {
+        if (BSTrank.empty()) {
+            BST<String, Rank> minimum_Rank = new BST<String, Rank>();
+            minimum_Rank.insert(wd, new Rank(wd, 1));
+
+            BSTrank.insert(documentId, minimum_Rank);
+            return true;
+        } else {
+            if (BSTrank.find(documentId)) {
+                BST<String, Rank> minimum_Rank = BSTrank.retrieve();
+                if (minimum_Rank.find(wd)) {
+                    // Document available, word available -> rank++
+                    Rank rank = minimum_Rank.retrieve();
+                    rank.add_Rank();
+                    minimum_Rank.update(rank);
+                    BSTrank.update(minimum_Rank);
+                    return false;
+                }
+                // Document available, word unavailable
+                minimum_Rank.insert(wd, new Rank(wd, 1));
+                BSTrank.update(minimum_Rank);
+                return true;
+            }
+            // Document unavailable
+            BST<String, Rank> minimum_Rank = new BST<String, Rank>();
+            minimum_Rank.insert(wd, new Rank(wd, 1));
+
+            BSTrank.insert(documentId, minimum_Rank);
+            return true;
+        }
+    }
+
+    public boolean found_doc(int documentId, String wd) {
+        if (BSTrank.find(documentId))
+            if (BSTrank.retrieve().find(wd))
+                return true;
+        return false;
+    }
+
+    public int getRank(int documentId, String wd) {
+        int value = 0;
+        if (BSTrank.find(documentId))
+            if (BSTrank.retrieve().find(wd))
+                return BSTrank.retrieve().retrieve().getRank();
+        return value;
+    }
+
+    public void printAllDoc() {
+        BSTrank.Traverse_Tr();
+    }
+
+    // =================================================================
+    public void TreeFreq(String word) {
+        word = word.toLowerCase().trim();
+        String[] wd = word.split(" ");
+
+        int doc = 0;
+        int indx = 0;
+        while (doc < 50) {
+            int j = 0;
+            int count = 0;
+            while (j < wd.length) {
+                count += this.getRank(doc, wd[j]);
+                j++;
+            }
+            if (count > 0) {
+                freq[indx] = new frequency();
+                freq[indx].documentId = doc;
+                freq[indx].fr = count;
+                indx++;
+            }
+            doc++;
+        }
+
+        merge__sort(freq, 0, indx - 1);
+
+        int x = 0;
+        while (x < indx) {
+            System.out.println(freq[x].documentId + "\t\t" + freq[x].fr);
+            x++;
+        }
+    }
+
+    // =================================================================
+    public static void merge__sort(frequency[] f, int lef, int rig) {
+        int i;
+        if (lef >= rig)
+            return;
+        i = (lef + rig) / 2;
+        merge__sort(f, lef, i); // Sort first half
+        merge__sort(f, i + 1, rig); // Sort second half
+        merge(f, lef, i, rig); // Merge
+    }
+
+    private static void merge(frequency[] f, int lef, int i, int rig) {
+        frequency[] fe = new frequency[rig - lef + 1];
+        int x = lef, j = i + 1, c = 0;
+
+        while (x <= i && j <= rig) {
+            if (f[x].fr >= f[j].fr)
+                fe[c++] = f[x++];
+            else
+                fe[c++] = f[j++];
+        }
+
+        while (j <= rig) {
+            fe[c++] = f[j++];
+        }
+
+        while (x <= i) {
+            fe[c++] = f[x++];
+        }
+
+        c = 0;
+        while (c < fe.length) {
+            f[c + lef] = fe[c];
+            c++;
+        }
+    }
+}
+/*
+import java.util.function.Function;
+
+/*
+Inverted Index with BSTs: Enhance the implementation of Inverted Index by using BSTs 
+instead of Lists. 
+ */
+
+/**
+ *
+ * @author Manal Alhihi
+ 
 public class Inverted_Index_BSTRanked {
             class frequency
             {
-                int docID = 0;
-                int f = 0;
+                int documentId = 0;
+                int fr = 0;
             }
     
            BST <Integer, BST <String,Rank>> BSTrank; 
@@ -19,126 +162,126 @@ public class Inverted_Index_BSTRanked {
                 
             }
 
-            public boolean addNew (int docID, String word)
+            public boolean add_document(int documentId, String wd)
             {
                if (BSTrank.empty())
                {
-                   BST <String,Rank> miniRank= new BST <String,Rank>();
-                   miniRank.insert(word, new Rank (word,1));
+                   BST <String,Rank> minimum_Rank= new BST <String,Rank>();
+                   minimum_Rank.insert(wd, new Rank (wd,1));
                    
-                   BSTrank.insert(docID, miniRank);
+                   BSTrank.insert(documentId, minimum_Rank);
                    return true;
                }
                else
                {
-                    if (BSTrank.find(docID))
+                    if (BSTrank.find(documentId))
                     {
-                        BST <String,Rank> miniRank= BSTrank.retrieve();
-                        if (miniRank.find(word))
+                        BST <String,Rank> minimum_Rank= BSTrank.retrieve();
+                        if (minimum_Rank.find(wd))
                         {
                             // document available , word avialble // rank ++
-                            Rank rank = miniRank.retrieve();
+                            Rank rank = minimum_Rank.retrieve();
                             rank.add_Rank();
-                            miniRank.update(rank);
-                            BSTrank.update(miniRank);
+                            minimum_Rank.update(rank);
+                            BSTrank.update(minimum_Rank);
                             return false;
                         }
                         //  document available , word unavailable 
-                        miniRank.insert(word, new Rank (word , 1));
-                        BSTrank.update(miniRank);
+                        minimum_Rank.insert(wd, new Rank (wd , 1));
+                        BSTrank.update(minimum_Rank);
                         return true;
                     }
                     // document unavailable 
-                   BST <String,Rank> miniRank= new BST <String,Rank>();
-                   miniRank.insert(word, new Rank (word,1));
+                   BST <String,Rank> minimum_Rank= new BST <String,Rank>();
+                   minimum_Rank.insert(wd, new Rank (wd,1));
                    
-                   BSTrank.insert(docID, miniRank);
+                   BSTrank.insert(documentId, minimum_Rank);
                    return true;
                }
         }
 
-        public boolean found(int docID, String word)
+        public boolean found_doc(int documentId, String wd)
         {
-               if (BSTrank.find(docID) )
-                  if (BSTrank.retrieve().find(word))
+               if (BSTrank.find(documentId) )
+                  if (BSTrank.retrieve().find(wd))
                       return true;
                return false;
         }
         
-        public int getrank (int docID, String word)
+        public int getRank(int documentId, String wd)
         {
             int value = 0;
-               if (BSTrank.find(docID) )
-                  if (BSTrank.retrieve().find(word))
+               if (BSTrank.find(documentId) )
+                  if (BSTrank.retrieve().find(wd))
                       return BSTrank.retrieve().retrieve().getRank();
                return value;
             
         }
-        public void printDocument()
+        public void printAllDoc()
         {
-                BSTrank.Traverse_Tr();
+                BSTrank.TraverseT();
         }
 
         //=================================================================
-        public void TreeFreq(String str)
+        public void TreeFreq(String word)
         {
-            str = str.toLowerCase().trim();
-            String [] words = str.split(" ");
+            word = word.toLowerCase().trim();
+            String [] wd = word.split(" ");
             
-            int index = 0;
-            for ( int docID = 0 ; docID < 50 ; docID++ )
+            int indx = 0;
+            for ( int doc= 0 ; doc < 50 ; doc++ )
             {
                 int count = 0 ;
-                for ( int j = 0 ;j < words.length ; j++ )
-                    count += this.getrank(docID, words[j]);
+                for ( int j = 0 ;j < wd.length ; j++ )
+                    count += this.getrank(doc, wd[j]);
                 if (count > 0)
                 {
-                    freqs[index] = new frequency();
-                    freqs[index].docID = docID;
-                    freqs[index].f = count;
-                    index ++;
+                    freqs[indx] = new frequency();
+                    freqs[indx].documentId = doc;
+                    freqs[indx].fr = count;
+                    indx ++;
                 }
             }
             
-            mergesort(freqs, 0, index-1 );
+            merge__sort(freqs, 0, indx-1 );
                 
-            for ( int x = 0 ; x < index ; x++)
-                System.out.println(freqs[x].docID + "\t\t" + freqs[x].f);
+            for ( int x = 0 ; x < indx ; x++)
+                System.out.println(freqs[x].documentId+ "\t\t" + freqs[x].fr);
         }
 
          //=================================================================
-    public static void mergesort ( frequency [] A , int l , int r ) 
+      public static void merge__sort(frequency[] f, int lef, int rig) 
     {
-        if ( l >= r )
+      int i;
+        if (lef >= rig)
             return;
-        int m = ( l + r ) / 2;
-        mergesort (A , l , m ) ;          // Sort first half
-        mergesort (A , m + 1 , r ) ;    // Sort second half
-        merge (A , l , m , r ) ;            // Merge
+        i =(lef+ rig) / 2;
+        merge__sort(f ,lef , i) ;          // Sort first half
+        merge__sort(f,i + 1 ,rig) ;    // Sort second half
+        merge(f,lef,i,rig) ;            // Merge
     }
 
-    private static void merge ( frequency [] A , int l , int m , int r ) 
+    private static void merge (frequency[] f, int lef,int i,int rig)
     {
-        frequency [] B = new frequency [ r - l + 1];
-        int i = l , j = m + 1 , k = 0;
+        frequency [] fe = new frequency [rig-lef+ 1];
+        int x = lef , j = i + 1 , c = 0;
     
-        while ( i <= m && j <= r )
+        while ( x <= i && j <= rig )
         {
-            if ( A [ i ].f >= A [ j ].f)
-                B [ k ++] = A [ i ++];
+            if (f[x].fr >= f[j].fr)
+                fe[c++] =f[x++];
             else
-                B [ k ++] = A [ j ++];
+                fe[c++] = f[ j ++];
         }
         
-        if ( i > m )
-            while ( j <= r )
-                B [ k ++] = A [ j ++];
+        if (x> i)
+            while ( j <= rig )
+                fe[c++] =f[j++];
         else
-            while ( i <= m )
-                B [ k ++] = A [ i ++];
+            while (x<= i )
+               fe[c++] = f[x++];
         
-        for ( k = 0; k < B . length ; k ++)
-            A [ k + l ] = B [ k ];
+        for (c= 0;c<fe. length ;c++)
+           f[c+lef ] =fe[c];
     }
-
-}
+}*/
