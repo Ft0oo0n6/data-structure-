@@ -1,4 +1,3 @@
-
 public class Inverted_Index_AVL {
  
             AVLTree <String, Term> DocumentIndexAVL; 
