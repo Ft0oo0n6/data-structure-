@@ -1,8 +1,5 @@
 public class AVLTree<K extends Comparable<K>, T>{
 
-        /*==================================================================
-            class BSTMapNode
-        ==================================================================*/
         class AVLNode<K extends Comparable<K>, T> {
                 public K key;
                 public T data;
@@ -55,8 +52,7 @@ public class AVLTree<K extends Comparable<K>, T>{
                         return "AVL Node{" + "key=" + key + ", data =" + data + '}';
                     }
             }
-
-        //=============================================================================    
+ 
         private AVLNode<K,T> root;
         private AVLNode<K,T>  current;
         private int counter;
@@ -99,7 +95,7 @@ public class AVLTree<K extends Comparable<K>, T>{
         }
 
         //searches for the key in the AVL, returns the data or null (if not found).
-        private T searchTreeHelper(AVLNode<K,T> node, K key) {
+        private T searchInAVL(AVLNode<K,T> node, K key) { //change the method name it was searchTreeHelper
                    // Place your code here\\
                     if (node == null)
                         return null;
@@ -109,9 +105,9 @@ public class AVLTree<K extends Comparable<K>, T>{
                         return node.data;
                     } 
                     else if (node.key.compareTo(key) >0)
-                         return searchTreeHelper(node.leftchild, key);
+                         return searchInAVL(node.leftchild, key);
                     else
-                         return searchTreeHelper(node.rightchild, key);
+                         return searchInAVL(node.rightchild, key);
         }
         
         // update the balance factor the node
@@ -135,7 +131,7 @@ public class AVLTree<K extends Comparable<K>, T>{
                         }
                 }
         }*/
-        private void updateBalance(AVLNode<K, T> node) { //changed to while loop
+        private void balanceUpdateTraversal(AVLNode<K, T> node) { //changed to while loop and the name it was updateBalance
     while (node != null) {
         if (node.balanceF < -1 || node.balanceF > 1) {
             rebalance(node);
@@ -166,30 +162,30 @@ public class AVLTree<K extends Comparable<K>, T>{
         void rebalance(AVLNode<K,T> node) {
                 if (node.balanceF > 0) {
                         if (node.rightchild.balanceF < 0) {
-                                rightRotate(node.rightchild);
-                                leftRotate(node);
+                                rightRotateNode(node.rightchild);
+                                leftRotateNode(node);
                         } else {
-                                leftRotate(node);
+                                leftRotateNode(node);
                         }
                 } else if (node.balanceF < 0) {
                         if (node.leftchild.balanceF > 0) {
-                                leftRotate(node.leftchild);
-                                rightRotate(node);
+                                leftRotateNode(node.leftchild);
+                                rightRotateNode(node);
                         } else {
-                                rightRotate(node);
+                                rightRotateNode(node);
                         }
                 }
         }
 
         public boolean find(K key) {
-                T data = searchTreeHelper(this.root, key);
+                T data = searchInAVL(this.root, key);
                 if ( data != null)
                     return true;
                 return false;
         }
 
         // rotate left at node x
-        void leftRotate(AVLNode<K,T> x) {
+        void leftRotateNode(AVLNode<K,T> x) { // it was leftRotate
             AVLNode<K,T> y = x.rightchild;
             x.rightchild = y.leftchild;
             if (y.leftchild != null) {
@@ -213,7 +209,7 @@ public class AVLTree<K extends Comparable<K>, T>{
         }
 
         // rotate right at node x
-        void rightRotate(AVLNode<K,T> x) {
+        void rightRotateNode(AVLNode<K,T> x) {// it was rightRotate
                 AVLNode<K,T> y = x.leftchild;
                 x.leftchild = y.rightchild;
                 if (y.rightchild != null) {
@@ -266,7 +262,7 @@ public class AVLTree<K extends Comparable<K>, T>{
             counter ++;
 
             //  re-balance the node if necessary
-            updateBalance(node);
+            balanceUpdateTraversal(node);
             return true;        
         }
         
@@ -322,7 +318,7 @@ public class AVLTree<K extends Comparable<K>, T>{
                     { 
                         // No parent for p, root must change
                         root = p;
-                        this.updateBalance(p);
+                        this.balanceUpdateTraversal(p);
                     } 
                     else 
                     {
@@ -330,7 +326,7 @@ public class AVLTree<K extends Comparable<K>, T>{
                             q.leftchild = p;
                         else 
                             q.rightchild = p;
-                        this.updateBalance(q);
+                        this.balanceUpdateTraversal(q);
                     }
                     counter--;
                     current = root;
