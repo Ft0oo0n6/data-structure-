@@ -31,7 +31,6 @@ public class Index {
         }
     }
 
-    // ===========================================================
 
     Document[] documents;
 
@@ -63,7 +62,7 @@ public class Index {
         }
     }
 
-    // ============================================================
+   
     public boolean[] retrieveDocuments(String word) {
         boolean[] matches = new boolean[50];
         int i = 0;
@@ -83,7 +82,6 @@ public class Index {
         return matches;
     }
 
-    // ============================================================
     public boolean[] AND_OR_Function(String query) {
         if (!query.contains(" OR ") && !query.contains(" AND ")) {
             query = query.toLowerCase().trim();
@@ -116,7 +114,7 @@ public class Index {
         return OR_Function(query);
     }
 
-    // ============================================================
+ 
     public boolean[] AND_Function(String query) {
         String[] andParts = query.split(" AND ");
         boolean[] results = retrieveDocuments(andParts[0].toLowerCase().trim());
@@ -135,7 +133,7 @@ public class Index {
         return results;
     }
 
-    // ============================================================
+
     public boolean[] OR_Function(String query) {
         String[] orParts = query.split(" OR ");
         boolean[] results = retrieveDocuments(orParts[0].toLowerCase().trim());
