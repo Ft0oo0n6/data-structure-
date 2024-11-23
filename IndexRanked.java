@@ -1,161 +1,333 @@
 
 public class IndexRanked {
-class frequency
-    {
-        int docID = 0;
-        int f = 0;
+    class frequency {
+        int documentId = 0;
+        int fr = 0;
     }
 
     class Document {
-            int docID;
-            LinkedList <String> index; 
+        int documentId;
+        LinkedList<String> indx;
+
+        public Document() {
+            documentId = 0;
+            indx = new LinkedList<String>();
+        }
+
+        public void addDocumentId(String wd) {
+            indx.insert(wd);
+        }
+
+        public boolean found_doc(String wd) {
+            if (indx.empty())
+                return false;
+
+            indx.findFirst();
+            int i = 0;
+            while (i < indx.size) {
+                if (indx.retrieve().compareTo(wd) == 0)
+                    return true;
+                indx.findNext();
+                i++;
+            }
+            return false;
+        }
+    }
+
+    // ===========================================================
+    Document[] index;
+    frequency[] fre;
+
+    public IndexRanked() {
+        fre = new frequency[50];
+        index = new Document[50];
+        int i = 0;
+        while (i < index.length) {
+            index[i] = new Document();
+            index[i].documentId = i;
+            i++;
+        }
+    }
+
+    public void add_document(int documentId, String value) {
+        index[documentId].addDocumentId(value);
+    }
+
+    public void printAllDoc(int documentId) {
+        if (index[documentId].indx.empty()) {
+            System.out.println("it's empty document !");
+        } else {
+            index[documentId].indx.findFirst();
+            int i = 0;
+            while (i < index[documentId].indx.size) {
+                System.out.print(index[documentId].indx.retrieve() + " ");
+                index[documentId].indx.findNext();
+                i++;
+            }
+        }
+    }
+
+    // ===========================================================
+    public boolean[] printAllDocument(String word) {
+        boolean[] outcome = new boolean[50];
+        int i = 0;
+        while (i < outcome.length) {
+            outcome[i] = false;
+            i++;
+        }
+
+        i = 0;
+        while (i < outcome.length) {
+            if (index[i].found_doc(word))
+                outcome[i] = true;
+            i++;
+        }
+
+        return outcome;
+    }
+
+    // ===========================================================
+    public void TreeFreq(String wd) {
+        wd = wd.toLowerCase().trim();
+        String[] word = wd.split(" ");
+        fre = new frequency[50];
+        int i = 0;
+        while (i < 50) {
+            fre[i] = new frequency();
+            fre[i].documentId = i;
+            fre[i].fr = 0;
+            i++;
+        }
+
+        int doc = 0;
+        while (doc < 50) {
+            int j = 0;
+            while (j < word.length) {
+                index[doc].indx.findFirst();
+                int coun = 0;
+                int x = 0;
+                while (x < index[doc].indx.size()) {
+                    if (index[doc].indx.retrieve().compareTo(word[j]) == 0)
+                        coun++;
+                    index[doc].indx.findNext();
+                    x++;
+                }
+
+                if (coun > 0)
+                    fre[doc].fr += coun;
+
+                j++;
+            }
+            doc++;
+        }
+
+        merge__sort(fre, 0, fre.length - 1);
+
+        System.out.println("\n DocID: t\t Score:");
+        int k = 0;
+        while (fre[k].fr != 0) {
+            System.out.println(fre[k].documentId + "\t\t" + fre[k].fr);
+            k++;
+        }
+    }
+
+    // ===========================================================
+    public static void merge__sort(frequency[] f, int lef, int rig) {
+        int i;
+        if (lef >= rig)
+            return;
+        i = (lef + rig) / 2;
+        merge__sort(f, lef, i); // Sort first half
+        merge__sort(f, i + 1, rig); // Sort second half
+        merge(f, lef, i, rig); // Merge
+    }
+
+    private static void merge(frequency[] f, int lef, int i, int rig) {
+        frequency[] fe = new frequency[rig - lef + 1];
+        int x = lef, j = i + 1, c = 0;
+
+        while (x <= i && j <= rig) {
+            if (f[x].fr >= f[j].fr)
+                fe[c++] = f[x++];
+            else
+                fe[c++] = f[j++];
+        }
+
+        while (j <= rig) {
+            fe[c++] = f[j++];
+        }
+
+        while (x <= i) {
+            fe[c++] = f[x++];
+        }
+
+        c = 0;
+        while (c < fe.length) {
+            f[c + lef] = fe[c];
+            c++;
+        }
+    }
+}
+
+/*public class IndexRanked {
+class frequency
+    {
+        int documentId = 0;
+        int fr = 0;
+    }
+
+    class Document {
+            int documentId;
+            LinkedList <String> indx; 
 
             public Document() {
-                docID = 0;
-                index = new LinkedList <String>();
+                documentId = 0;
+                indx = new LinkedList <String>();
             }
 
-            public void addNew (String word)
+            public void addNew (String wd)
             {
-                index.insert(word);
+                indx.insert(wd);
             }
 
-           public boolean found(String word)
+           public boolean found(String wd)
            {
-               if (index.empty())
+               if (indx.empty())
                    return false;
 
-               index.findFirst();
-               for ( int i = 0 ; i < index.size ; i++)
+               indx.findFirst();
+               for (int i = 0 ; i < indx.size ; i++)
                {
-                   if ( index.retrieve().compareTo(word) == 0)
+                   if (indx.retrieve().compareTo(wd) == 0)
                        return true;
-                  index.findNext();
+                  indx.findNext();
                }
                return false;
            }
     }   
     //===========================================================
     
-    Document [] indexes;
-    frequency [] freqs;
+    Document [] index;
+    frequency [] fre;
 
     
     public IndexRanked() {
-        freqs = new frequency [50];
-        indexes = new Document [50];
-        for ( int i = 0 ; i < indexes.length ; i++)
+        fre = new frequency [50];
+        index = new Document [50];
+        for (int i = 0 ; i < index.length ; i++)
         {
-            indexes [i] = new Document();
-            indexes [i].docID = i;
+            index [i] = new Document();
+            index [i].documentId = i;
         }
     }
         
-    public void addDocument ( int docID, String data)
+    public void add_document( int documentId, String value)
     {
-            indexes[docID].addNew(data);
+            index[documentId].addNew(value);
     }
     
-    public void printDocment (int docID)
+    public void printAll_Document(int documentId)
     {
-        if ( indexes[docID].index.empty())
-            System.out.println("Empty Document");
+        if (index[documentId].indx.empty())
+            System.out.println("it's empty document !");
         else
         {
-            indexes[docID].index.findFirst();
-            for ( int i = 0; i< indexes[docID].index.size ; i++)
+            index[documentId].indx.findFirst();
+            for ( int i = 0; i< index[documentId].indx.size ; i++)
             {
-                System.out.print (indexes[docID].index.retrieve() + " ");
-                indexes[docID].index.findNext();
+                System.out.print (index[documentId].indx.retrieve() + " ");
+                index[documentId].indx.findNext();
             }
         }
     }
 //=================================================================
-public  boolean [] getDocs (String str)
+public  boolean [] printAllDocument(String word)
 {
-    boolean [] result = new boolean [50];
-    for (int i = 0 ; i < result.length ; i++)
-        result[i] = false;
+    boolean [] outcome = new boolean [50];
+    for (int i = 0 ; i < outcome.length ; i++)
+        outcome[i] = false;
     
-    for (int i = 0 ; i < result.length ; i++)
-        if (indexes[i].found(str))
-            result[i] = true;
+    for (int i = 0 ; i < outcome.length ; i++)
+        if (index[i].found(word))
+            outcome[i] = true;
 
-    return result;
+    return outcome;
 }
 
 
 //=================================================================
-        public void TreeFreq(String str)
+        public void TreeFreq(String wd)
         {
-            str = str.toLowerCase().trim();
-            String [] words = str.split(" ");
-            freqs = new frequency[50];
+            wd = wd.toLowerCase().trim();
+            String [] word = wd.split(" ");
+            fre = new frequency[50];
             for ( int i = 0 ; i < 50 ; i++ )
             {
-                freqs[i] = new frequency();
-                freqs[i].docID = i;
-                freqs[i].f = 0;
+                fre[i] = new frequency();
+                fre[i].documentId = i;
+                fre[i].fr = 0;
             }
             
-            for ( int docs = 0 ; docs <50 ; docs++)
+            for ( int doc = 0 ; doc <50 ; doc++)
             {
-                for ( int i = 0 ; i < words.length ; i++)
+                for ( int i = 0 ; i < word.length ; i++)
                 {
-                    indexes[docs].index.findFirst();
-                    int wordcount = 0;
-                    for ( int x = 0 ; x < indexes[docs].index.size() ; x++ )
+                    index[doc].indx.findFirst();
+                    int coun = 0;
+                    for ( int x = 0 ; x < index[doc].indx.size() ; x++ )
                     {
-                        if (indexes[docs].index.retrieve().compareTo(words[i])==0)
-                            wordcount ++;
-                        indexes[docs].index.findNext();
+                        if (index[doc].indx.retrieve().compareTo(word[i])==0)
+                            coun ++;
+                        index[doc].indx.findNext();
                     }
                     
-                    if (wordcount > 0)
-                        freqs[docs].f += wordcount;
+                    if (coun > 0)
+                        fre[doc].fr+= coun;
                 }
             }
             
-            mergesort(freqs, 0, freqs.length-1 );
+            merge__sort(fre, 0, fre.length-1 );
             
             System.out.println("\nDocIDt\tScore");
-            for ( int x = 0 ;  freqs[x].f != 0 ; x++)
-                System.out.println(freqs[x].docID + "\t\t" + freqs[x].f);
+            for ( int k = 0 ;  fre[k].fr != 0 ;k++)
+                System.out.println(fre[k].documentId + "\t\t" + fre[k].fr);
         }
 
          //=================================================================
-    public static void mergesort ( frequency [] A , int l , int r ) 
+    public static void merge__sort(frequency[] f, int lef, int rig) 
     {
-        if ( l >= r )
+      int i;
+        if (lef >= rig)
             return;
-        int m = ( l + r ) / 2;
-        mergesort (A , l , m ) ;          // Sort first half
-        mergesort (A , m + 1 , r ) ;    // Sort second half
-        merge (A , l , m , r ) ;            // Merge
+        i =(lef+ rig) / 2;
+        merge__sort(f ,lef , i) ;          // Sort first half
+        merge__sort(f,i + 1 ,rig) ;    // Sort second half
+        merge(f,lef,i,rig) ;            // Merge
     }
 
-    private static void merge ( frequency [] A , int l , int m , int r ) 
+    private static void merge (frequency[] f, int lef,int i,int rig)
     {
-        frequency [] B = new frequency [ r - l + 1];
-        int i = l , j = m + 1 , k = 0;
+        frequency [] fe = new frequency [rig-lef+ 1];
+        int x = lef , j = i + 1 , c = 0;
     
-        while ( i <= m && j <= r )
+        while ( x <= i && j <= rig )
         {
-            if ( A [ i ].f >= A [ j ].f)
-                B [ k ++] = A [ i ++];
+            if (f[x].fr >= f[j].fr)
+                fe[c++] =f[x++];
             else
-                B [ k ++] = A [ j ++];
+                fe[c++] = f[ j ++];
         }
         
-        if ( i > m )
-            while ( j <= r )
-                B [ k ++] = A [ j ++];
+        if (x> i)
+            while ( j <= rig )
+                fe[c++] =f[j++];
         else
-            while ( i <= m )
-                B [ k ++] = A [ i ++];
+            while (x<= i )
+               fe[c++] = f[x++];
         
-        for ( k = 0; k < B . length ; k ++)
-            A [ k + l ] = B [ k ];
+        for (c= 0;c<fe. length ;c++)
+           f[c+lef ] =fe[c];
     }
-    
-}
+
+
+}*/
