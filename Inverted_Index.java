@@ -1,4 +1,3 @@
-
 public class Inverted_Index {
 
             LinkedList <Term> DocumentIndex;
