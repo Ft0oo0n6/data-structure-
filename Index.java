@@ -1,3 +1,6 @@
+import jdk.jfr.Frequency;
+
+
 public class Index {
     class Document {
         int documentID;
