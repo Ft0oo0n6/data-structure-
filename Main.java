@@ -1,15 +1,13 @@
 import java.util.Scanner;
 
+
 public class Main {
+    
        
      public static Scanner input = new Scanner (System.in);
      public static Search_Engine SE = new Search_Engine();
      
-    
-    /**
-     * @param args the command line arguments
-     */
-    
+   
     public static int menu()
     {
         System.out.println("1. Term Retrieval. ");
@@ -33,7 +31,7 @@ public class Main {
     public static void Retrieval_Term()
     {
         int choice1 ;
-        System.out.println("################### Retrieval Term ####################");
+        System.out.println("------------- Retrieval Term -------------");
         
         System.out.println("1. index");
         System.out.println("2. inverted index");
@@ -47,15 +45,15 @@ public class Main {
         str = input.next();
         
         System.out.print("Result doc IDs: ");
-        printBoolean(SE.Term_Retrieval(str.trim().toLowerCase(), choice1 ));
+        printBoolean(SE.RetrievalTerm(str.trim().toLowerCase(), choice1 ));
         System.out.println("\n");
 
     }
     
     public static void Boolean_Retrieval_menu()
     {
-        System.out.println("################### Boolean Retrieval ####################");
-        System.out.println("1. index");
+        System.out.println("------------- Boolean Retrieval -------------");
+        System.out.println("1. inde6x");
         System.out.println("2. inverted index");
         System.out.println("3. inverted index using BST");
         System.out.println("4. inverted index using AVL");
@@ -77,7 +75,7 @@ public class Main {
 
     public static void Ranked_Retrieval_menu()
     {
-        System.out.println("######## Ranked Retrieval ######## ");
+        System.out.println("----- Ranked Retrieval ----- ");
         System.out.println("1. index");
         System.out.println("2. inverted index");
         System.out.println("3. inverted index using BST");
@@ -95,7 +93,7 @@ public class Main {
         {
             case 1:
                 System.out.println("get ranked from index list");
-                SE.Ranked_Index(str);
+                SE.IndexRanked(str);
                 break;
             case 2:
                 System.out.println("get ranked from inverted index list");
@@ -103,11 +101,11 @@ public class Main {
                 break;
             case 3:
                 System.out.println("get ranked from BST");
-                SE.Ranked_RetrievalBST(str);
+                SE.RetrievalRankedBST(str);
                 break;
             case 4:
                 System.out.println("get ranked from AVL");
-                SE.Ranked_RetrievalAVL(str);
+                SE.RetrievalRankedAVL(str);
                 break;
         }
         System.out.println("\n");
@@ -115,26 +113,26 @@ public class Main {
     
     public static void Indexed_Documents_menu()
     {
-        System.out.println("######## Indexed Documents ######## ");
+        System.out.println("-----Indexed Documents ----- ");
         System.out.println("Indexed Documents " );
-        SE.Indexed_Documents();
+        SE.IndexedDocuments();
         System.out.println("");
     }
     
     public static void Indexed_Tokens_menu()
     {
-        System.out.println("######## Indexed Tokens ######## ");
+        System.out.println("----- Indexed Tokens ----- ");
         System.out.println("tokens " );
-        SE.Indexed_Tokens();
+        SE.IndexedTokens();
         System.out.println("");
     }
     
     public static void main(String[] args) {
 
-        SE.LoadData("C:\\Users\\Majdi\\Downloads\\data\\stop.txt", "C:\\Users\\Majdi\\Downloads\\data\\dataset.CSV");
+        SE.LoadData("stop.txt", "dataset.CSV");
 
         // TODO code application logic here
-        int choice;
+      /*  int choice;
         
         do {
                 choice = menu();
@@ -174,4 +172,34 @@ public class Main {
         } while (choice != 6);
     }
     
-}
+}*/
+             int choice;
+
+        do {
+             choice = menu();
+
+                    if (choice == 1) {
+            
+                          Retrieval_Term();
+                    } else if (choice == 2) {
+
+                         Boolean_Retrieval_menu();
+                    } else if (choice == 3) {
+        
+                         Ranked_Retrieval_menu();
+                    } else if (choice == 4) {
+       
+                         Indexed_Documents_menu();
+                    } else if (choice == 5) {
+        
+                         Indexed_Tokens_menu();
+                    } else if (choice == 6) {
+      
+                  break;
+                        } else {
+       
+                      System.out.println("Bad choice, try again!");
+                        }                   
+            } while (choice != 6);
+        }
+    }
