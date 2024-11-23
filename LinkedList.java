@@ -1,6 +1,6 @@
 public class LinkedList<T>{
     
-            // class Node
+            
             class Node<T> {
                 public T data;
                 public Node<T> next;
@@ -12,7 +12,7 @@ public class LinkedList<T>{
                     data = da;
                     next = null;
                 }
-                // Setters/Getters...
+                
 
                 public T getData() {
                     return data;
@@ -32,7 +32,7 @@ public class LinkedList<T>{
 
             }
 
-    // class Linked List
+
     private Node<T> head;
     private Node<T> curr;
     int size;
