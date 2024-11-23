@@ -1,35 +1,34 @@
-
 public class Inverted_Index_BST {
-            BST < String , Term> DocumentIndexBST; 
+            BST < String , Term> DocumentindexBST; 
       
 
             public Inverted_Index_BST() {
-                DocumentIndexBST = new BST< String , Term> ();
+                DocumentindexBST = new BST< String , Term> ();
             }
 
             public int size()
             {
-                return DocumentIndexBST.size();
+                return DocumentindexBST.size();
             }
             
             public boolean adddocument(int docID, String word)
             {Term term;
-               if (DocumentIndexBST.empty())
+               if (DocumentindexBST.empty())
                {
                
                     term = new Term ();
                    term.setVocabulary(new Vocabulary (word));
                    term.add_documentID(docID);
-                   DocumentIndexBST.insert(word, term);
+                   DocumentindexBST.insert(word, term);
                    return true;
                }
                else
                {
-                    if (DocumentIndexBST.find(word))
+                    if (DocumentindexBST.find(word))
                     {
-                         term = this.DocumentIndexBST.retrieve();
+                         term = this.DocumentindexBST.retrieve();
                         term.add_documentID(docID);
-                        DocumentIndexBST.update(term);
+                        DocumentindexBST.update(term);
                         return false;
                         
                     }
@@ -38,19 +37,19 @@ public class Inverted_Index_BST {
                    term = new Term ();
                    term.setVocabulary(new Vocabulary (word));
                    term.add_documentID(docID);
-                   DocumentIndexBST.insert(word, term);
+                   DocumentindexBST.insert(word, term);
                     return true;
            }
         }
 
         public boolean found(String word)
         {
-               return DocumentIndexBST.find(word);
+               return DocumentindexBST.find(word);
         }
         
         public void printDocument()
         {
-            DocumentIndexBST.Traverse();
+            DocumentindexBST.Traverse();
         }
 
         public boolean [] AND_OR_Function (String string )
@@ -62,7 +61,7 @@ public class Inverted_Index_BST {
                 string = string.toLowerCase().trim();
             
                 if (this.found (string))
-                    result =  this.DocumentIndexBST.retrieve().getDocs();
+                    result =  this.DocumentindexBST.retrieve().getDocs();
                 return result;
             }
             
@@ -89,13 +88,13 @@ public class Inverted_Index_BST {
             boolean [] result = new boolean [50];
             
             if (this.found (ANDs[0].toLowerCase().trim()))
-                result = this.DocumentIndexBST.retrieve().getDocs();
+                result = this.DocumentindexBST.retrieve().getDocs();
 
             for ( int i = 1 ; i< ANDs.length ; i++)
             {
                 boolean [] tempResult = new boolean [50];
                 if (this.found (ANDs[i].toLowerCase().trim()))
-                    tempResult = this.DocumentIndexBST.retrieve().getDocs();
+                    tempResult = this.DocumentindexBST.retrieve().getDocs();
                 
                 for ( int j = 0 ; j < 50 ; j++)
                     result [j] = result[j] && tempResult[j];
@@ -110,13 +109,13 @@ public class Inverted_Index_BST {
             boolean []  result  = new boolean [50];
             
             if (this.found (ORs[0].toLowerCase().trim()))
-                 result  = this.DocumentIndexBST.retrieve().getDocs();
+                 result  = this.DocumentindexBST.retrieve().getDocs();
 
             for ( int i = 1 ; i< ORs.length ; i++)
             {
                 boolean [] tempResult = new boolean [50];
                 if (this.found (ORs[i].toLowerCase().trim()))
-                    tempResult = this.DocumentIndexBST.retrieve().getDocs();
+                    tempResult = this.DocumentindexBST.retrieve().getDocs();
                 
                 for ( int j = 0 ; j < 50 ; j++)
                     result [j] = result[j] || tempResult[j];
@@ -125,4 +124,3 @@ public class Inverted_Index_BST {
             return result;
         }
 }
-
