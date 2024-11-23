@@ -131,48 +131,7 @@ public class Main {
 
         SE.LoadData("stop.txt", "dataset.CSV");
 
-        // TODO code application logic here
-      /*  int choice;
-        
-        do {
-                choice = menu();
-                switch (choice)
-                {
-                    //term Retrieval
-                    case 1:
-                            Retrieval_Term();
-                            break;
-
-                    //Boolean Retrieval: to enter a Boolean query that will return a set of unranked documents  
-                    case 2:
-                            Boolean_Retrieval_menu();
-                            break;
-                            
-                    //Ranked Retrieval: to enter a query that will return a ranked list of documents with their scores 
-                    case 3:
-                            Ranked_Retrieval_menu();
-                            break;
-                    
-                    //Indexed Documents: to show number of documents in the index 
-                    case 4:
-                            Indexed_Documents_menu();
-                            break;
-                    
-                    //Indexed Tokens: to show number of vocabulary and tokens in the index  
-                    case 5:
-                            Indexed_Tokens_menu();
-                            break;
-                     
-                    case 6:
-                            break;
-                            
-                    default:       
-                            System.out.println("bad choice, try again!");
-                }
-        } while (choice != 6);
-    }
-    
-}*/
+      
              int choice;
 
         do {
