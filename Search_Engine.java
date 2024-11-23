@@ -78,22 +78,13 @@ public class Search_Engine {
                      this.invertedindexranked.add_document(documentId, word);
                      this.invertedindexBSTranked.add_document(documentId, word);
                      this.invertedindexAVLranked.adddocument(documentId, word);
-                            /*
-                                this.index.addDocument(documentId, wd);
-                                this.DocumentIndex.adddocument(documentId, wd);
-                                this.invertedindexBST.adddocument(documentId, wd);
-                                this.invertedindexAVL.adddocument(documentId, wd);
-                                this.invertedindexAVLranked.adddocument(documentId, wd);*/
+                            
                   }
                }
             }
          
-                    //this.index.displayDocument(documentId);
          }
-                //this.DocumentIndex.printDocment();
-                //this.invertedindexBST.printDocument();
-                //this.invertedindexAVL.printDocument();
-                //this.invertedindexAVLranked.printDocument();
+                
                 
          vocab = DocumentIndexAVL.DocumentIndexAVL.size();
          System.out.println("tokens " + tokens);
@@ -106,7 +97,7 @@ public class Search_Engine {
       }
    }
     
-   public boolean []  Retrieval(String string , int DatasetSType) // be sure
+   public boolean []  Retrieval(String string , int DatasetSType) 
    {
       boolean [] documents = new boolean [50] ;
       for (int i = 0 ; i < documents.length ; i++)
@@ -143,7 +134,7 @@ public class Search_Engine {
       this.invertedindexBSTranked.TreeFreq(str);
    }
 
-   public void RetrievalRankedAVL(String str)//name changed
+   public void RetrievalRankedAVL(String str)
    {
       this.invertedindexAVLranked.TreeFreq(str);
    }
