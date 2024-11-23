@@ -9,7 +9,7 @@ public class Vocabulary {
         this.word = word;
     }
 
-    @Override
+
     public String toString() {
         return word;
     }
