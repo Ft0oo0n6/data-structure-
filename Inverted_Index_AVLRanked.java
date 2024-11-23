@@ -23,19 +23,19 @@ public class Inverted_Index_AVLRanked {
             if (AVLrank.find(documentId)) {
                 AVLTree<String, Rank> min_Rank = AVLrank.retrieve();
                 if (min_Rank.find(wod)) {
-                    // document available, word available // rank ++
+                    
                     Rank rank = min_Rank.retrieve();
                     rank.add_Rank();
                     min_Rank.update(rank);
                     AVLrank.update(min_Rank);
                     return false;
                 }
-                // document available, word unavailable
+           
                 min_Rank.insert(wod, new Rank(wod, 1));
                 AVLrank.update(min_Rank);
                 return true;
             }
-            // document unavailable
+       
             AVLTree<String, Rank> min_Rank = new AVLTree<String, Rank>();
             min_Rank.insert(wod, new Rank(wod, 1));
 
@@ -63,7 +63,6 @@ public class Inverted_Index_AVLRanked {
         AVLrank.TraverseT();
     }
 
-    // =================================================================
     public void TreeFreq(String ste) {
         ste = ste.toLowerCase().trim();
         String[] words = ste.split(" ");
@@ -91,14 +90,14 @@ public class Inverted_Index_AVLRanked {
         }
     }
 
-    // =================================================================
+
     public static void merge__sort(frequency[] f, int lef, int rig) {
         if (lef >= rig)
             return;
         int mer = (lef + rig) / 2;
-        merge__sort(f, lef, mer); // Sort first half
-        merge__sort(f, mer + 1, rig); // Sort second half
-        merge(f, lef, mer, rig); // Merge
+        merge__sort(f, lef, mer); 
+        merge__sort(f, mer + 1, rig); 
+        merge(f, lef, mer, rig); 
     }
 
     private static void merge(frequency[] f, int lef, int mer, int rig) {
