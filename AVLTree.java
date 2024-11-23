@@ -3,12 +3,12 @@ public class AVLTree<K extends Comparable<K>, T>{
         class AVLNode<K extends Comparable<K>, T> {
                 public K key;
                 public T data;
-                AVLNode<K,T> parent; // pointer to the parent
-                AVLNode<K,T> leftchild; // pointer to left child //changed
-                AVLNode<K,T> rightchild; // pointer to right child//changed
-                int balanceF; // balance factor of the node //changed
+                AVLNode<K,T> parent; 
+                AVLNode<K,T> leftchild; 
+                AVLNode<K,T> rightchild; 
+                int balanceF; 
 
-                    /** Creates a new instance of BTNode */
+                    
                     public AVLNode() {
                             this.key = null;  
                             this.data = null;
@@ -71,14 +71,14 @@ public class AVLTree<K extends Comparable<K>, T>{
         }
 
 
-         // Removes all elements in the map.
+         
         public void clear()
         {
             root = current = null;
             counter = 0;
         }
 
-        // Return the key and data of the current element
+        
         public T retrieve()
         {
             T data =null;
@@ -87,15 +87,15 @@ public class AVLTree<K extends Comparable<K>, T>{
             return data;
         }
 
-        // Update the data of current element.
+        
         public void update(T e)
         {
             if (current != null)
                 current.data = e;
         }
 
-        //searches for the key in the AVL, returns the data or null (if not found).
-        private T searchInAVL(AVLNode<K,T> node, K key) { //change the method name it was searchTreeHelper
+        
+        private T searchInAVL(AVLNode<K,T> node, K key) { 
                    // Place your code here\\
                     if (node == null)
                         return null;
@@ -110,35 +110,14 @@ public class AVLTree<K extends Comparable<K>, T>{
                          return searchInAVL(node.rightchild, key);
         }
         
-        // update the balance factor the node
-       /* private void updateBalance(AVLNode<K,T> node) {
-                if (node.balanceF < -1 || node.balanceF > 1) {
-                        rebalance(node);
-                        return;
-                }
-
-                if (node.parent != null) {
-                        if (node == node.parent.leftchild) {
-                                node.parent.balanceF -= 1;
-                        } 
-
-                        if (node == node.parent.rightchild) {
-                                node.parent.balanceF += 1;
-                        }
-
-                        if (node.parent.balanceF != 0) {
-                                updateBalance(node.parent);
-                        }
-                }
-        }*/
-        private void balanceUpdateTraversal(AVLNode<K, T> node) { //changed to while loop and the name it was updateBalance
+  
+        private void balanceUpdateTraversal(AVLNode<K, T> node) { 
     while (node != null) {
         if (node.balanceF < -1 || node.balanceF > 1) {
             rebalance(node);
-            return; // Stop after rebalancing
+            return; 
         }
 
-        // Update the parent's balance factor
         if (node.parent != null) {
             if (node == node.parent.leftchild) {
                 node.parent.balanceF -= 1;
@@ -146,19 +125,18 @@ public class AVLTree<K extends Comparable<K>, T>{
                 node.parent.balanceF += 1;
             }
 
-            // If the parent's balance factor is zero, stop the loop
+            
             if (node.parent.balanceF == 0) {
                 break;
             }
         }
 
-        // Move up to the parent node
         node = node.parent;
     }
 }
 
 
-        // rebalance the tree
+        
         void rebalance(AVLNode<K,T> node) {
                 if (node.balanceF > 0) {
                         if (node.rightchild.balanceF < 0) {
@@ -184,8 +162,8 @@ public class AVLTree<K extends Comparable<K>, T>{
                 return false;
         }
 
-        // rotate left at node x
-        void leftRotateNode(AVLNode<K,T> x) { // it was leftRotate
+      
+        void leftRotateNode(AVLNode<K,T> x) { 
             AVLNode<K,T> y = x.rightchild;
             x.rightchild = y.leftchild;
             if (y.leftchild != null) {
@@ -203,13 +181,12 @@ public class AVLTree<K extends Comparable<K>, T>{
             y.leftchild = x;
             x.parent = y;
 
-            // update the balance factor
+
             x.balanceF = x.balanceF - 1 - Math.max(0, y.balanceF);
             y.balanceF = y.balanceF - 1 + Math.min(0, x.balanceF);
         }
 
-        // rotate right at node x
-        void rightRotateNode(AVLNode<K,T> x) {// it was rightRotate
+        void rightRotateNode(AVLNode<K,T> x) {
                 AVLNode<K,T> y = x.leftchild;
                 x.leftchild = y.rightchild;
                 if (y.rightchild != null) {
@@ -226,7 +203,7 @@ public class AVLTree<K extends Comparable<K>, T>{
                 y.rightchild = x;
                 x.parent = y;
 
-                // update the balance factor
+                
                 x.balanceF = x.balanceF + 1 - Math.min(0, y.balanceF);
                 y.balanceF = y.balanceF + 1 + Math.max(0, x.balanceF);
         }
@@ -237,7 +214,7 @@ public class AVLTree<K extends Comparable<K>, T>{
             AVLNode<K,T> node = new AVLNode<K,T>(key, data);
 
             AVLNode<K,T> p = null;
-            AVLNode<K,T> currentI = this.root; //current of insert
+            AVLNode<K,T> currentI = this.root; 
 
             while (currentI != null) {
                     p = currentI;
@@ -249,7 +226,7 @@ public class AVLTree<K extends Comparable<K>, T>{
                             currentI = currentI.rightchild;
                     }
             }
-            // p  is parent of current
+           
             node.parent = p;
             if (p == null) {
                     root = node;
@@ -261,7 +238,7 @@ public class AVLTree<K extends Comparable<K>, T>{
             }
             counter ++;
 
-            //  re-balance the node if necessary
+           
             balanceUpdateTraversal(node);
             return true;        
         }
@@ -269,7 +246,7 @@ public class AVLTree<K extends Comparable<K>, T>{
     public boolean remove(K key) {
         K k1 = key;
         AVLNode<K,T>  p = root;
-        AVLNode<K,T>  q = null; // Parent of p
+        AVLNode<K,T>  q = null; 
 
         while (p != null) 
         {
@@ -284,12 +261,10 @@ public class AVLTree<K extends Comparable<K>, T>{
                     p = p.rightchild;
                 }
                 else 
-                { // Found the key
-                    // Check the three cases
+                { 
                     if ((p.leftchild != null) && (p.rightchild != null)) 
                     { 
-                        // Case 3: two children
-                        // Search for the min in the right subtree
+                       
                         AVLNode<K,T> min = p.rightchild;
                         q = p;
                         while (min.leftchild != null) 
@@ -301,22 +276,22 @@ public class AVLTree<K extends Comparable<K>, T>{
                         p.data = min.data;
                         k1 = min.key;
                         p = min;
-                        // Now fall back to either case 1 or 2
+                    
                     }
-                    // The subtree rooted at p will change here
+                   
                     if (p.leftchild != null) 
                     { 
-                        // One child
+                     
                         p = p.leftchild;
                     } 
                     else 
                     { 
-                        // One or no children
+                      
                         p = p.rightchild;
                     }
                     if (q == null)
                     { 
-                        // No parent for p, root must change
+                      
                         root = p;
                         this.balanceUpdateTraversal(p);
                     } 
@@ -332,11 +307,11 @@ public class AVLTree<K extends Comparable<K>, T>{
                     current = root;
                     return true;    
             } 
-        } // end while (p != null) 
+        }
         return false;
     }
 
-       //============================================================================
+      
        public void Traverse()
         {
             if (root != null)
@@ -354,7 +329,6 @@ public class AVLTree<K extends Comparable<K>, T>{
         }
 
         
-       //=========================================================================== 
        public void TraverseT()
         {
             if (root != null)
@@ -378,7 +352,6 @@ public class AVLTree<K extends Comparable<K>, T>{
             
         }
         
-       //=========================================================================== 
        public void PrintData()
         {
             if (root != null)
