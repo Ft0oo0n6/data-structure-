@@ -1,17 +1,172 @@
-
 public class Inverted_IndexRanked {
+    class frequency {
+        int doumentId = 0;
+        int fr = 0;
+    }
+
+    LinkedList<TermRank> invertedindex;
+    frequency[] fre;
+
+    public Inverted_IndexRanked() {
+        invertedindex = new LinkedList<TermRank>();
+        fre = new frequency[50];
+    }
+
+    public int size() {
+        return invertedindex.size();
+    }
+
+    public boolean add_document(int doumentId, String wd) {
+        TermRank termR;
+        if (invertedindex.empty()) {
+            termR = new TermRank();
+            termR.setVocab(new Vocabulary(wd));
+            termR.addDocumentId(doumentId);
+            invertedindex.insert(termR);
+            return true;
+        } else {
+            invertedindex.findFirst();
+            while (!invertedindex.last()) {
+                if (invertedindex.retrieve().word.word.compareTo(wd) == 0) {
+                    termR = invertedindex.retrieve();
+                    termR.addDocumentId(doumentId);
+                    invertedindex.update(termR);
+                    return false;
+                }
+                invertedindex.findNext();
+            }
+            if (invertedindex.retrieve().word.word.compareTo(wd) == 0) {
+                termR = invertedindex.retrieve();
+                termR.addDocumentId(doumentId);
+                invertedindex.update(termR);
+                return false;
+            } else {
+                termR = new TermRank();
+                termR.setVocab(new Vocabulary(wd));
+                termR.addDocumentId(doumentId);
+                invertedindex.insert(termR);
+            }
+            return true;
+        }
+    }
+
+    public boolean found_doc(String wd) {
+        if (invertedindex.empty())
+            return false;
+
+        invertedindex.findFirst();
+        int i = 0;
+        while (i < invertedindex.size()) {
+            if (invertedindex.retrieve().word.word.compareTo(wd) == 0)
+                return true;
+            invertedindex.findNext();
+            i++;
+        }
+        return false;
+    }
+
+    public void printAllDoc() {
+        if (this.invertedindex.empty())
+            System.out.println("it's empty Inverted Index!!");
+        else {
+            this.invertedindex.findFirst();
+            while (!this.invertedindex.last()) {
+                System.out.println(invertedindex.retrieve());
+                this.invertedindex.findNext();
+            }
+            System.out.println(invertedindex.retrieve());
+        }
+    }
+
+    public void TreeFreq(String word) {
+        word = word.toLowerCase().trim();
+        String[] wd = word.split(" ");
+        fre = new frequency[50];
+        int i = 0;
+        while (i < 50) {
+            fre[i] = new frequency();
+            fre[i].doumentId = i;
+            fre[i].fr = 0;
+            i++;
+        }
+
+        i = 0;
+        while (i < wd.length) {
+            if (found_doc(wd[i])) {
+                int[] docume = invertedindex.retrieve().printAllDoc();
+                int j = 0;
+                while (j < docume.length) {
+                    if (docume[j] != 0) {
+                        int index = j;
+                        fre[index].doumentId = index;
+                        fre[index].fr += docume[j];
+                    }
+                    j++;
+                }
+            }
+            i++;
+        }
+
+        merge__sort(fre, 0, fre.length - 1);
+
+        System.out.println("\n DocumentID: t\t Scor:e");
+        int x = 0;
+        while (fre[x].fr != 0) {
+            System.out.println(fre[x].doumentId + "\t\t" + fre[x].fr);
+            x++;
+        }
+    }
+
+    public static void merge__sort(frequency[] f, int lef, int rig) {
+        int i;
+        if (lef >= rig)
+            return;
+        i = (lef + rig) / 2;
+        merge__sort(f, lef, i); // Sort first half
+        merge__sort(f, i + 1, rig); // Sort second half
+        merge(f, lef, i, rig); // Merge
+    }
+
+    private static void merge(frequency[] f, int lef, int i, int rig) {
+        frequency[] fe = new frequency[rig - lef + 1];
+        int x = lef, j = i + 1, c = 0;
+
+        while (x <= i && j <= rig) {
+            if (f[x].fr >= f[j].fr)
+                fe[c++] = f[x++];
+            else
+                fe[c++] = f[j++];
+        }
+
+        while (j <= rig) {
+            fe[c++] = f[j++];
+        }
+
+        while (x <= i) {
+            fe[c++] = f[x++];
+        }
+
+        c = 0;
+        while (c < fe.length) {
+            f[c + lef] = fe[c];
+            c++;
+        }
+    }
+}
+
+/*public class Inverted_IndexRanked {
             class frequency
             {
-                int docID = 0;
-                int f = 0;
+                int doumentId = 0;
+                int fr= 0;
             }
 
             LinkedList <TermRank> invertedindex; 
-            frequency [] freqs;
+            frequency [] fre;
             
             public Inverted_IndexRanked() {
                 invertedindex = new LinkedList <TermRank>();
-                freqs = new frequency[50];
+                fre = new frequency[50];
             }
             
             public int size()
@@ -19,14 +174,14 @@ public class Inverted_IndexRanked {
                 return invertedindex.size();
             }
 
-            public boolean addNew (int docID, String word)
-            {
+            public boolean add_document(int doumentId, String wd)
+            { TermRank termR;
                 if (invertedindex.empty())
                {
-                   TermRank t = new TermRank ();
-                    t.setVocabulary(new Vocabulary (word));
-                    t.add_docID(docID);
-                    invertedindex.insert(t);
+                    termR = new TermRank ();
+                    termR.setVocabulary(new Vocabulary (wd));
+                    termR.add_docID(doumentId);
+                    invertedindex.insert(termR);
                     return true;
                }
                else
@@ -34,34 +189,34 @@ public class Inverted_IndexRanked {
                     invertedindex.findFirst();
                     while ( ! invertedindex.last())
                     {
-                        if ( invertedindex.retrieve().word.word.compareTo(word) == 0)
+                        if ( invertedindex.retrieve().word.word.compareTo(wd) == 0)
                         {
-                            TermRank t = invertedindex.retrieve();
-                            t.add_docID(docID);
-                            invertedindex.update(t);
+                            termR = invertedindex.retrieve();
+                            termR.add_docID(doumentId);
+                            invertedindex.update(termR);
                             return false;
                         }
                        invertedindex.findNext();
                     }
-                    if ( invertedindex.retrieve().word.word.compareTo(word) == 0)
+                    if ( invertedindex.retrieve().word.word.compareTo(wd) == 0)
                     {
-                        TermRank t = invertedindex.retrieve();
-                        t.add_docID(docID);
-                        invertedindex.update(t);
+                        termR = invertedindex.retrieve();
+                        termR.add_docID(doumentId);
+                        invertedindex.update(termR);
                         return false;
                     }
                     else
                     {
-                        TermRank t = new TermRank ();
-                        t.setVocabulary(new Vocabulary (word));
-                        t.add_docID(docID);
-                        invertedindex.insert(t);
+                        termR = new TermRank ();
+                        termR.setVocabulary(new Vocabulary (wd));
+                        termR.add_docID(doumentId);
+                        invertedindex.insert(termR);
                     }
                     return true;
            }
         }
 
-        public boolean found(String word)
+        public boolean found(String wd)
         {
                if (invertedindex.empty())
                    return false;
@@ -69,7 +224,7 @@ public class Inverted_IndexRanked {
                invertedindex.findFirst();
                for ( int i = 0 ; i < invertedindex.size ; i++)
                {
-                   if ( invertedindex.retrieve().word.word.compareTo(word) == 0)
+                   if ( invertedindex.retrieve().word.word.compareTo(wd) == 0)
                        return true;
                   invertedindex.findNext();
                }
@@ -79,7 +234,7 @@ public class Inverted_IndexRanked {
         public void printDocment()
         {
             if (this.invertedindex.empty())
-                System.out.println("Empty Inverted Index");
+                System.out.println("it's empty Inverted Index!!");
             else
             {
                 this.invertedindex.findFirst();
@@ -93,21 +248,21 @@ public class Inverted_IndexRanked {
         }
 
         //=================================================================
-        public void TreeFreq(String str)
+        public void TreeFreq(String word)
         {
-            str = str.toLowerCase().trim();
-            String [] words = str.split(" ");
-            freqs = new frequency[50];
+            word = word.toLowerCase().trim();
+            String [] wd = word.split(" ");
+            fre = new frequency[50];
             for ( int i = 0 ; i < 50 ; i++ )
             {
-                freqs[i] = new frequency();
-                freqs[i].docID = i;
-                freqs[i].f = 0;
+                fre[i] = new frequency();
+                fre[i].doumentId = i;
+                fre[i].fr = 0;
             }
             
-            for ( int i = 0 ; i < words.length ; i++)
+            for ( int i = 0 ; i < wd.length ; i++)
             {
-                if (found (words[i]))
+                if (found(wd[i]))
                 {
                     int [] docs = invertedindex.retrieve().getDocs();
                     for ( int j = 0 ; j < docs.length ; j ++)
@@ -115,54 +270,55 @@ public class Inverted_IndexRanked {
                         if (docs[j] != 0)
                         {
                             int index = j;
-                            freqs[index].docID = index;
-                            freqs[index].f += docs[j];
+                            fre[index].doumentId = index;
+                            fre[index].fr += docs[j];
                         }
                     }
                 }
             }
             
-            mergesort(freqs, 0, freqs.length-1 );
+            merge__sort(fre, 0,fre.length-1);
             
             System.out.println("\nDocIDt\tScore");
-            for ( int x = 0 ;  freqs[x].f != 0 ; x++)
-                System.out.println(freqs[x].docID + "\t\t" + freqs[x].f);
+            for ( int x = 0 ;  fre[x].fr != 0 ; x++)
+                System.out.println(fre[x].doumentId + "\t\t" + fre[x].fr);
         }
 
          //=================================================================
-    public static void mergesort ( frequency [] A , int l , int r ) 
+    public static void merge__sort(frequency[] f, int lef, int rig) 
     {
-        if ( l >= r )
+      int i;
+        if (lef >= rig)
             return;
-        int m = ( l + r ) / 2;
-        mergesort (A , l , m ) ;          // Sort first half
-        mergesort (A , m + 1 , r ) ;    // Sort second half
-        merge (A , l , m , r ) ;            // Merge
+        i =(lef+ rig) / 2;
+        merge__sort(f ,lef , i) ;          // Sort first half
+        merge__sort(f,i + 1 ,rig) ;    // Sort second half
+        merge(f,lef,i,rig) ;            // Merge
     }
 
-    private static void merge ( frequency [] A , int l , int m , int r ) 
+    private static void merge (frequency[] f, int lef,int i,int rig)
     {
-        frequency [] B = new frequency [ r - l + 1];
-        int i = l , j = m + 1 , k = 0;
+        frequency [] fe = new frequency [rig-lef+ 1];
+        int x = lef , j = i + 1 , c = 0;
     
-        while ( i <= m && j <= r )
+        while ( x <= i && j <= rig )
         {
-            if ( A [ i ].f >= A [ j ].f)
-                B [ k ++] = A [ i ++];
+            if (f[x].fr >= f[j].fr)
+                fe[c++] =f[x++];
             else
-                B [ k ++] = A [ j ++];
+                fe[c++] = f[ j ++];
         }
         
-        if ( i > m )
-            while ( j <= r )
-                B [ k ++] = A [ j ++];
+        if (x> i)
+            while ( j <= rig )
+                fe[c++] =f[j++];
         else
-            while ( i <= m )
-                B [ k ++] = A [ i ++];
+            while (x<= i )
+               fe[c++] = f[x++];
         
-        for ( k = 0; k < B . length ; k ++)
-            A [ k + l ] = B [ k ];
+        for (c= 0;c<fe. length ;c++)
+           f[c+lef ] =fe[c];
     }
 
 
-}
+}*/
