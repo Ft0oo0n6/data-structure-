@@ -127,14 +127,14 @@ public class BST<K extends Comparable<K>, T> {
          return null;
    
       if(key.compareTo(pa.key ) < 0)
-         pa.left = remove_node(key, pa.left, flag); //go left
+         pa.left = remove_node(key, pa.left, flag); 
       else if(key.compareTo(pa.key) > 0)
-         pa.right = remove_node(key, pa.right, flag); //go right
+         pa.right = remove_node(key, pa.right, flag); 
       else {
                     
          flag = true;
          if (pa.left != null && pa.right != null)
-         { //two children
+         { 
             q = find_least(pa.right);
             pa.key = q.key;
             pa.data = q.data;
@@ -142,9 +142,9 @@ public class BST<K extends Comparable<K>, T> {
          }
          else 
          {
-            if (pa.right == null) //one child
+            if (pa.right == null) 
                child = pa.left;
-            else if (pa.left == null) //one child
+            else if (pa.left == null) 
                child = pa.right;
             return child;
          }
